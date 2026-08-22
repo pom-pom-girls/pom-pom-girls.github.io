@@ -6,7 +6,8 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাডস্টেরা সোশ্যাল বার -->
+    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (ন্যাচারাল ডোম লোড) -->
+    <script type="text/javascript" src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
     <script type="text/javascript" src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <style>
@@ -301,6 +302,7 @@
             padding-top: 8px;
         }
 
+        /* অ্যাডমিন মোডাল */
         .modal {
             display: none;
             position: fixed;
@@ -483,7 +485,7 @@
 
     </div>
 
-    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
@@ -500,14 +502,8 @@
         </div>
     </div>
 
-    <!-- গ্লোবাল স্ক্রিপ্ট ট্যাগ ব্যাকআপ -->
-    <script type="text/javascript" src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
-
     <script>
         const ADMIN_PASSWORD = "1234";
-
-        // Adsterra Direct Link (Smartlink) - প্রতি থাম্বনেইল ক্লিকে কাজ করার জন্য
-        const ADSTERRA_DIRECT_LINK = "https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js";
 
         const DEFAULT_POSTS = [
             {
@@ -541,14 +537,8 @@
                 const videoCount = Array.isArray(post.videos) ? post.videos.length : 1;
                 const card = document.createElement('div');
                 card.className = 'card';
+                // কোনো কোড উইন্ডো না খুলে সরাসরি ওয়াচ পেজ ওপেন
                 card.onclick = () => {
-                    // ১. পপ-আন্ডার ট্রিগার
-                    try {
-                        const win = window.open(ADSTERRA_DIRECT_LINK, '_blank');
-                        if (win) win.focus();
-                    } catch(e) {}
-
-                    // ২. ওয়াচ পেজে প্রবেশ
                     const url = new URL(window.location.href);
                     url.searchParams.set('v', index);
                     window.location.href = url.toString();
@@ -670,7 +660,7 @@
             }
         }
 
-        // অ্যাডমিন মোডাল ওপেন শর্টকাট (Ctrl + Alt + S)
+        // অ্যাডমিন প্যানেল শর্টকাট (Ctrl + Alt + S)
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
                 e.preventDefault();
