@@ -6,6 +6,21 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+    <!-- শুধু ওয়াচ পেজে ব্রাউজার লেভেলে অ্যাড লোড করার স্ক্রিপ্ট -->
+    <script>
+        if (window.location.search.includes('v=')) {
+            var s1 = document.createElement('script');
+            s1.src = 'https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js';
+            s1.async = true;
+            document.head.appendChild(s1);
+
+            var s2 = document.createElement('script');
+            s2.src = 'https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js';
+            s2.async = true;
+            document.head.appendChild(s2);
+        }
+    </script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -40,21 +55,18 @@
             align-items: center;
             overflow: hidden;
             margin: 8px 0;
+            min-height: 60px;
         }
 
         .ad-wrapper {
-            max-width: 100%;
             display: flex;
             justify-content: center;
-        }
-
-        .ad-wrapper iframe {
-            max-width: 100% !important;
+            max-width: 100%;
         }
 
         @media (max-width: 480px) {
             .ad-wrapper {
-                transform: scale(0.85);
+                transform: scale(0.75);
                 transform-origin: center center;
             }
         }
@@ -63,14 +75,14 @@
             background: #111a2e;
             border: 1px solid #1e293b;
             border-radius: 12px;
-            padding: 20px 12px;
+            padding: 15px 10px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
         .header-box h1 {
             color: #ff4b4b;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             margin-bottom: 5px;
             text-transform: uppercase;
@@ -78,8 +90,8 @@
 
         .header-box p {
             color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 12px;
+            font-size: 12px;
+            margin-bottom: 10px;
         }
 
         .join-btn {
@@ -89,13 +101,12 @@
             gap: 8px;
             background: linear-gradient(90deg, #ff4b4b, #ff6b6b);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             box-shadow: 0 0 15px rgba(255, 75, 75, 0.4);
-            transition: 0.2s;
             margin-bottom: 5px;
         }
 
@@ -160,7 +171,6 @@
             border-radius: 6px;
             border: 1px solid rgba(56, 189, 248, 0.4);
             z-index: 2;
-            pointer-events: none;
         }
 
         .play-overlay {
@@ -175,7 +185,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none;
         }
 
         .play-overlay::after {
@@ -226,7 +235,7 @@
         }
 
         .watch-title-box h2 {
-            font-size: 16px;
+            font-size: 15px;
             color: #e2e8f0;
         }
 
@@ -241,19 +250,16 @@
             background: #111a2e;
             border: 1px solid #1e293b;
             border-radius: 12px;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .player-label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .player-frame-box {
@@ -282,7 +288,7 @@
             background: #111a2e;
             border: 1px solid #1e293b;
             border-radius: 12px;
-            padding: 18px 14px;
+            padding: 15px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -291,7 +297,7 @@
 
         .footer-desc-box h3 {
             color: #38bdf8;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .footer-desc-box p {
@@ -481,25 +487,10 @@
             return `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
         }
 
-        function loadInsideWatchAds() {
-            // ১. পপ-আন্ডার স্ক্রিপ্ট (শুধু ওয়াচ পেজের ভেতরে লোড হবে)
-            const popScript = document.createElement('script');
-            popScript.src = "https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js";
-            document.body.appendChild(popScript);
-
-            // ২. সোশ্যাল বার স্ক্রিপ্ট (শুধু ওয়াচ পেজের ভেতরে লোড হবে)
-            const barScript = document.createElement('script');
-            barScript.src = "https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js";
-            document.body.appendChild(barScript);
-        }
-
         function displayWatchPage(post) {
             document.getElementById('videoGrid').style.display = 'none';
             document.getElementById('watchView').style.display = 'flex';
             document.getElementById('watchVideoTitle').innerText = post.title;
-
-            // শুধু ওয়াচ পেজে আসলেই অ্যাড স্ক্রিপ্ট চালু হবে
-            loadInsideWatchAds();
 
             const videoList = Array.isArray(post.videos) ? post.videos : [post.videoSrc];
             const stack = document.getElementById('playersStack');
