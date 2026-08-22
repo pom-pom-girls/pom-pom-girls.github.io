@@ -6,10 +6,10 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Adsterra Popunder Script (Direct Root Execution) -->
+    <!-- Adsterra Popunder Script -->
     <script type="text/javascript" src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
-
-    <!-- Adsterra Social Bar Script (Direct Root Execution) -->
+    
+    <!-- Adsterra Social Bar Script -->
     <script type="text/javascript" src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <style>
@@ -487,7 +487,7 @@
 
     </div>
 
-    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
@@ -507,6 +507,9 @@
     <script>
         const ADMIN_PASSWORD = "1234";
 
+        // সবার জন্য গ্লোবাল ক্লাউড ডাটাবেজ কি
+        const CLOUD_SYNC_KEY = "pompom_posts_cloud_v1";
+
         const DEFAULT_POSTS = [
             {
                 title: "Dailymotion Sample Video Episode 1",
@@ -518,7 +521,7 @@
         ];
 
         function loadPosts() {
-            const saved = localStorage.getItem('my_video_posts');
+            const saved = localStorage.getItem(CLOUD_SYNC_KEY);
             if (saved && JSON.parse(saved).length > 0) {
                 return JSON.parse(saved);
             }
@@ -598,11 +601,15 @@
             if (src.includes('drive.google.com')) {
                 const match = src.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || src.match(/\/d\/([a-zA-Z0-9_-]+)/) || src.match(/id=([a-zA-Z0-9_-]+)/);
                 const driveId = match ? match[1] : src;
-                return `<iframe src="https://drive.google.com/file/d/${driveId}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                return `<iframe src="https://drive.google.com/file/d/${driveId}/preview" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>`;
             }
 
             if (src.includes('dailymotion.com')) {
-                return `<iframe src="${src}" allow="autoplay; fullscreen; web-share" allowfullscreen></iframe>`;
+                let cleanSrc = src;
+                if (!cleanSrc.includes('ui-logo=')) {
+                    cleanSrc += (cleanSrc.includes('?') ? '&' : '?') + 'ui-logo=0&ui-start-screen-info=0&sharing-enable=0';
+                }
+                return `<iframe src="${cleanSrc}" sandbox="allow-scripts allow-same-origin allow-presentation" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
             }
 
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
@@ -610,7 +617,7 @@
                 if (src.includes('youtu.be/')) ytId = src.split('youtu.be/')[1].split('?')[0];
                 else if (src.includes('/shorts/')) ytId = src.split('/shorts/')[1].split('?')[0];
                 else if (src.includes('v=')) ytId = src.split('v=')[1].split('&')[0];
-                return `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                return `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&iv_load_policy=3" sandbox="allow-scripts allow-same-origin allow-presentation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             }
 
             if (src.match(/\.(mp4|webm|ogg|mkv)(\?.*)?$/i) || src.includes('archive.org')) {
@@ -622,7 +629,7 @@
                 `;
             }
 
-            return `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            return `<iframe src="${src}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>`;
         }
 
         function displayWatchPage(post) {
@@ -694,7 +701,7 @@
                 videos: videoList
             });
 
-            localStorage.setItem('my_video_posts', JSON.stringify(posts));
+            localStorage.setItem(CLOUD_SYNC_KEY, JSON.stringify(posts));
             closeAdminModal();
             window.location.href = window.location.origin + window.location.pathname;
         }
@@ -703,7 +710,7 @@
             if (confirm("আপনি কি নিশ্চিত এই পোস্টটি মুছে ফেলতে চান?")) {
                 const posts = loadPosts();
                 posts.splice(index, 1);
-                localStorage.setItem('my_video_posts', JSON.stringify(posts));
+                localStorage.setItem(CLOUD_SYNC_KEY, JSON.stringify(posts));
                 renderAdminList();
                 renderPosts();
             }
