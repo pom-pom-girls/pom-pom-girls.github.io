@@ -6,10 +6,6 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (ন্যাচারাল ডোম লোড) -->
-    <script src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
-    <script src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
-
     <style>
         * {
             box-sizing: border-box;
@@ -301,9 +297,111 @@
             border-top: 1px solid #1e293b;
             padding-top: 8px;
         }
+
+        /* অ্যাডমিন মোডাল */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: #131d31;
+            border: 1px solid #1f2d47;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #0b111e;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .modal-content textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-content button.save-btn {
+            width: 100%;
+            background: #38bdf8;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            color: #0b111e;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .admin-manage-section {
+            border-top: 1px solid #1e293b;
+            padding-top: 12px;
+        }
+
+        .admin-post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .admin-post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b111e;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #1e293b;
+        }
+
+        .admin-delete-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 22px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (সরাসরি বডি ট্রিগার) -->
+    <script src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
+    <script src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <div class="container">
         
@@ -387,8 +485,28 @@
 
     </div>
 
+    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <h3 style="color:#38bdf8; margin-bottom:12px;">নতুন ভিডিও পোস্ট তৈরি করুন</h3>
+            <input type="text" id="postTitle" placeholder="পোস্টের শিরোনাম">
+            <input type="text" id="postThumb" placeholder="থাম্বনেইল ছবির URL">
+            <textarea id="postLinks" placeholder="ভিডিও লিংক বা পুরো এমবেড কোড পেস্ট করুন (প্রতি লাইনে ১টি করে দিন)"></textarea>
+            <button class="save-btn" onclick="savePost()">পোস্ট পাবলিশ করুন</button>
+
+            <div class="admin-manage-section">
+                <h4 style="font-size:14px; color:#cbd5e1; margin-bottom:8px;">বিদ্যমান পোস্ট ম্যানেজ / মুছুন:</h4>
+                <div class="admin-post-list" id="adminPostList"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const POSTS_DATA = [
+        const ADMIN_PASSWORD = "1234";
+
+        // ডিফল্ট স্ট্যাটিক পোস্ট
+        const DEFAULT_POSTS = [
             {
                 title: "Dailymotion Sample Video Episode 1",
                 thumb: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -398,16 +516,25 @@
             }
         ];
 
+        function loadPosts() {
+            const saved = localStorage.getItem('my_video_posts');
+            if (saved && JSON.parse(saved).length > 0) {
+                return JSON.parse(saved);
+            }
+            return DEFAULT_POSTS;
+        }
+
         function renderPosts() {
+            const posts = loadPosts();
             const grid = document.getElementById('videoGrid');
             grid.innerHTML = '';
 
-            if (POSTS_DATA.length === 0) {
-                grid.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding: 40px 10px; color:#64748b;">কোনো ভিডিও পাওয়া যায়নি।</div>';
+            if (posts.length === 0) {
+                grid.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding: 40px 10px; color:#64748b;">কোনো ভিডিও পাওয়া যায়নি। নতুন ভিডিও পোস্ট করতে কিবোর্ডে <b>Ctrl + Alt + S</b> চাপুন।</div>';
                 return;
             }
 
-            POSTS_DATA.forEach((post, index) => {
+            posts.forEach((post, index) => {
                 const videoCount = Array.isArray(post.videos) ? post.videos.length : 1;
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -432,6 +559,27 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('v');
             window.location.href = url.toString();
+        }
+
+        function renderAdminList() {
+            const posts = loadPosts();
+            const adminList = document.getElementById('adminPostList');
+            adminList.innerHTML = '';
+
+            if (posts.length === 0) {
+                adminList.innerHTML = '<p style="color:#64748b; font-size:12px;">কোনো পোস্ট নেই।</p>';
+                return;
+            }
+
+            posts.forEach((post, index) => {
+                const item = document.createElement('div');
+                item.className = 'admin-post-item';
+                item.innerHTML = `
+                    <span style="font-size:12px; color:#e2e8f0; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${post.title}</span>
+                    <button class="admin-delete-btn" onclick="deletePost(${index})">মুছুন</button>
+                `;
+                adminList.appendChild(item);
+            });
         }
 
         function parseCleanSource(input) {
@@ -503,12 +651,65 @@
         function checkURLParams() {
             const params = new URLSearchParams(window.location.search);
             const videoIndex = params.get('v');
+            const posts = loadPosts();
 
-            if (videoIndex !== null && POSTS_DATA[videoIndex]) {
-                displayWatchPage(POSTS_DATA[videoIndex]);
+            if (videoIndex !== null && posts[videoIndex]) {
+                displayWatchPage(posts[videoIndex]);
             } else {
                 renderPosts();
             }
+        }
+
+        // অ্যাডমিন মোডাল ওপেন শর্টকাট (Ctrl + Alt + S)
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+                e.preventDefault();
+                const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
+                if (pass === ADMIN_PASSWORD) {
+                    renderAdminList();
+                    document.getElementById('adminModal').style.display = 'flex';
+                } else if (pass !== null) {
+                    alert("ভুল পাসওয়ার্ড!");
+                }
+            }
+        });
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value;
+            const thumb = document.getElementById('postThumb').value;
+            const linksRaw = document.getElementById('postLinks').value.trim();
+
+            if (!title || !linksRaw) {
+                alert("দয়া করে শিরোনাম এবং অন্তত ১টি ভিডিও লিংক দিন!");
+                return;
+            }
+
+            const videoList = linksRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+            const posts = loadPosts();
+            posts.unshift({
+                title: title,
+                thumb: thumb,
+                videos: videoList
+            });
+
+            localStorage.setItem('my_video_posts', JSON.stringify(posts));
+            closeAdminModal();
+            window.location.href = window.location.origin + window.location.pathname;
+        }
+
+        function deletePost(index) {
+            if (confirm("আপনি কি নিশ্চিত এই পোস্টটি মুছে ফেলতে চান?")) {
+                const posts = loadPosts();
+                posts.splice(index, 1);
+                localStorage.setItem('my_video_posts', JSON.stringify(posts));
+                renderAdminList();
+                renderPosts();
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
         }
 
         checkURLParams();
