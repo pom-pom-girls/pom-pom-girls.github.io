@@ -6,8 +6,10 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (ন্যাচারাল ডোম লোড) -->
+    <!-- Adsterra Popunder Script (Direct Root Execution) -->
     <script type="text/javascript" src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
+
+    <!-- Adsterra Social Bar Script (Direct Root Execution) -->
     <script type="text/javascript" src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <style>
@@ -485,7 +487,7 @@
 
     </div>
 
-    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
@@ -537,7 +539,6 @@
                 const videoCount = Array.isArray(post.videos) ? post.videos.length : 1;
                 const card = document.createElement('div');
                 card.className = 'card';
-                // কোনো কোড উইন্ডো না খুলে সরাসরি ওয়াচ পেজ ওপেন
                 card.onclick = () => {
                     const url = new URL(window.location.href);
                     url.searchParams.set('v', index);
