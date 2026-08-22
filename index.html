@@ -6,9 +6,8 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (অফিশিয়াল হেড প্লেসমেন্ট) -->
-    <script type='text/javascript' src='//classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js'></script>
-    <script type='text/javascript' src='//classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js'></script>
+    <!-- অ্যাডস্টেরা সোশ্যাল বার অ্যাড (হেডারেই লোড) -->
+    <script type="text/javascript" src="//classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <style>
         * {
@@ -55,7 +54,7 @@
 
         @media (max-width: 480px) {
             .ad-wrapper {
-                transform: scale(0.75);
+                transform: scale(0.8);
                 transform-origin: center center;
             }
         }
@@ -485,7 +484,7 @@
 
     </div>
 
-    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
@@ -501,6 +500,9 @@
             </div>
         </div>
     </div>
+
+    <!-- গ্লোবাল পপ-আন্ডার স্ক্রিপ্ট লোডার -->
+    <script type="text/javascript" src="//classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
 
     <script>
         const ADMIN_PASSWORD = "1234";
@@ -659,9 +661,9 @@
             }
         }
 
-        // অ্যাডমিন প্যানেল লিসেনার
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
+        // অ্যাডমিন প্যানেল লিসেনার (Ctrl + Alt + S)
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS' || e.keyCode === 83)) {
                 e.preventDefault();
                 const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
                 if (pass === ADMIN_PASSWORD) {
