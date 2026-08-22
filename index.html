@@ -6,6 +6,10 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (অফিশিয়াল হেড প্লেসমেন্ট) -->
+    <script type='text/javascript' src='//classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js'></script>
+    <script type='text/javascript' src='//classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js'></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -309,7 +313,7 @@
             background: rgba(0, 0, 0, 0.85);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
             padding: 15px;
         }
 
@@ -399,16 +403,12 @@
 </head>
 <body>
 
-    <!-- অ্যাডস্টেরা পপ-আন্ডার ও সোশ্যাল বার (সরাসরি বডি ট্রিগার) -->
-    <script src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
-    <script src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
-
     <div class="container">
         
         <div class="header-box">
             <div class="ad-container">
                 <div class="ad-wrapper">
-                    <script>
+                    <script type="text/javascript">
                         atOptions = {
                             'key' : '9106b28060c8cb5f051946b0d46a7e91',
                             'format' : 'iframe',
@@ -417,7 +417,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
 
@@ -428,7 +428,7 @@
 
             <div class="ad-container">
                 <div class="ad-wrapper">
-                    <script>
+                    <script type="text/javascript">
                         atOptions = {
                             'key' : '9106b28060c8cb5f051946b0d46a7e91',
                             'format' : 'iframe',
@@ -437,7 +437,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
         </div>
@@ -461,7 +461,7 @@
         <div class="footer-desc-box">
             <div class="ad-container">
                 <div class="ad-wrapper">
-                    <script>
+                    <script type="text/javascript">
                         atOptions = {
                             'key' : '9106b28060c8cb5f051946b0d46a7e91',
                             'format' : 'iframe',
@@ -470,7 +470,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
 
@@ -485,7 +485,7 @@
 
     </div>
 
-    <!-- গোপন অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAdminModal()">&times;</span>
@@ -505,7 +505,6 @@
     <script>
         const ADMIN_PASSWORD = "1234";
 
-        // ডিফল্ট স্ট্যাটিক পোস্ট
         const DEFAULT_POSTS = [
             {
                 title: "Dailymotion Sample Video Episode 1",
@@ -660,9 +659,9 @@
             }
         }
 
-        // অ্যাডমিন মোডাল ওপেন শর্টকাট (Ctrl + Alt + S)
-        window.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+        // অ্যাডমিন প্যানেল লিসেনার
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
                 e.preventDefault();
                 const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
                 if (pass === ADMIN_PASSWORD) {
