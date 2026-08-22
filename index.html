@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- শুধু ওয়াচ পেজে আসলে পপ-আন্ডার ও সোশ্যাল বার লোড হবে -->
+    <script>
+        if (window.location.search.includes('v=')) {
+            // ১. পপ-আন্ডার অ্যাড
+            var pop = document.createElement('script');
+            pop.src = 'https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js';
+            document.head.appendChild(pop);
+
+            // ২. সোশ্যাল বার অ্যাড
+            var social = document.createElement('script');
+            social.src = 'https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js';
+            document.head.appendChild(social);
+        }
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0b111e;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ad-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .ad-wrapper {
+            max-width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ad-wrapper iframe {
+            max-width: 100% !important;
+        }
+
+        @media (max-width: 480px) {
+            .ad-wrapper {
+                transform: scale(0.85);
+                transform-origin: center center;
+            }
+        }
+
+        .header-box {
+            background: #111a2e;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 20px 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .header-box h1 {
+            color: #ff4b4b;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .header-box p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .join-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(90deg, #ff4b4b, #ff6b6b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 0 15px rgba(255, 75, 75, 0.4);
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .ad-banner {
+            background: #10192d;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #131d31;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1f2d47;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .card-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .card-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .video-count-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #38bdf8;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(56, 189, 248, 0.85);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .play-overlay::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #fff;
+            margin-left: 3px;
+        }
+
+        .card-title {
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #watchView {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .back-btn {
+            align-self: flex-start;
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .watch-title-box {
+            background: #111a2e;
+            border: 1px solid #1e293b;
+            padding: 14px;
+            border-radius: 10px;
+        }
+
+        .watch-title-box h2 {
+            font-size: 16px;
+            color: #e2e8f0;
+        }
+
+        .all-players-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .single-player-card {
+            background: #111a2e;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .player-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .player-frame-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            min-height: 200px;
+            max-height: 70vh;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .player-frame-box iframe,
+        .player-frame-box video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: contain;
+        }
+
+        .footer-desc-box {
+            background: #111a2e;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 18px 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-desc-box h3 {
+            color: #38bdf8;
+            font-size: 16px;
+        }
+
+        .footer-desc-box p {
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .footer-copyright {
+            color: #64748b;
+            font-size: 11px;
+            border-top: 1px solid #1e293b;
+            padding-top: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: #131d31;
+            border: 1px solid #1f2d47;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #0b111e;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .modal-content textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-content button.save-btn {
+            width: 100%;
+            background: #38bdf8;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            color: #0b111e;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .admin-manage-section {
+            border-top: 1px solid #1e293b;
+            padding-top: 12px;
+        }
+
+        .admin-post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .admin-post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b111e;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #1e293b;
+        }
+
+        .admin-delete-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 22px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header-box">
+            <div class="ad-container">
+                <div class="ad-wrapper">
+                    <script>
+                        atOptions = {
+                            'key' : '9106b28060c8cb5f051946b0d46a7e91',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                </div>
+            </div>
+
+            <h1>POMPOM PREMIUM FOR FREE🔥</h1>
+            <p>আপনার প্রিমিয়াম ভিডিও কালেকশন</p>
+            
+            <a href="https://t.me/" target="_blank" class="join-btn">🚀 Join Now (টেলিগ্রাম চ্যানেল)</a>
+
+            <div class="ad-container">
+                <div class="ad-wrapper">
+                    <script>
+                        atOptions = {
+                            'key' : '9106b28060c8cb5f051946b0d46a7e91',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-banner">
+            ⭐ মোবাইলে স্মুথলি দেখতে প্লে বাটনে ট্যাপ করুন | নিয়মিত ভিডিও পেতে টেলিগ্রামে থাকুন
+        </div>
+
+        <div class="video-grid" id="videoGrid"></div>
+
+        <div id="watchView">
+            <button class="back-btn" onclick="backToHome()">⬅️ সব ভিডিওতে ফিরে যান</button>
+
+            <div class="watch-title-box">
+                <h2 id="watchVideoTitle">ভিডিওর শিরোনাম</h2>
+            </div>
+
+            <div class="all-players-stack" id="playersStack"></div>
+        </div>
+
+        <div class="footer-desc-box">
+            <div class="ad-container">
+                <div class="ad-wrapper">
+                    <script>
+                        atOptions = {
+                            'key' : '9106b28060c8cb5f051946b0d46a7e91',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                </div>
+            </div>
+
+            <h3>আমাদের সাইট সম্পর্কে</h3>
+            <p>
+                মোবাইল এবং যেকোনো ডিভাইসে সরাসরি প্রিমিয়াম ভিডিও উপভোগ করার একটি প্ল্যাটফর্ম। নতুন ভিডিওর লিংক সবার আগে পেতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকুন।
+            </p>
+            <div class="footer-copyright">
+                © All Rights Reserved | Premium Video Collection
+            </div>
+        </div>
+
+    </div>
+
+    <!-- সিক্রেট অ্যাডমিন মোডাল (Ctrl + Alt + S) -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <h3 style="color:#38bdf8; margin-bottom:12px;">নতুন ভিডিও পোস্ট তৈরি করুন</h3>
+            <input type="text" id="postTitle" placeholder="পোস্টের শিরোনাম">
+            <input type="text" id="postThumb" placeholder="থাম্বনেইল ছবির URL">
+            <textarea id="postLinks" placeholder="ভিডিও লিংক বা পুরো এমবেড কোড পেস্ট করুন (প্রতি লাইনে ১টি করে দিন)"></textarea>
+            <button class="save-btn" onclick="savePost()">পোস্ট পাবলিশ করুন</button>
+
+            <div class="admin-manage-section">
+                <h4 style="font-size:14px; color:#cbd5e1; margin-bottom:8px;">বিদ্যমান পোস্ট ম্যানেজ / মুছুন:</h4>
+                <div class="admin-post-list" id="adminPostList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "1234";
+
+        function loadPosts() {
+            const saved = localStorage.getItem('my_video_posts');
+            if (saved && JSON.parse(saved).length > 0) {
+                return JSON.parse(saved);
+            }
+            return [];
+        }
+
+        function renderPosts() {
+            const posts = loadPosts();
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = '';
+
+            if (posts.length === 0) {
+                grid.innerHTML = '<div style="text-align:center; grid-column: 1/-1; padding: 40px 10px; color:#64748b;">কোনো ভিডিও পাওয়া যায়নি। নতুন ভিডিও পোস্ট করতে কিবোর্ডে <b>Ctrl + Alt + S</b> চাপুন।</div>';
+                return;
+            }
+
+            posts.forEach((post, index) => {
+                const videoCount = Array.isArray(post.videos) ? post.videos.length : 1;
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('v', index);
+                    window.location.href = url.toString();
+                };
+                card.innerHTML = `
+                    <div class="card-thumbnail">
+                        <span class="video-count-badge">🎬 ${videoCount} টি ভিডিও</span>
+                        <img src="${post.thumb || 'https://via.placeholder.com/400x250/10192d/ffffff?text=Video'}" alt="${post.title}" loading="lazy">
+                        <div class="play-overlay"></div>
+                    </div>
+                    <div class="card-title">${post.title}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function backToHome() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('v');
+            window.location.href = url.toString();
+        }
+
+        function renderAdminList() {
+            const posts = loadPosts();
+            const adminList = document.getElementById('adminPostList');
+            adminList.innerHTML = '';
+
+            if (posts.length === 0) {
+                adminList.innerHTML = '<p style="color:#64748b; font-size:12px;">কোনো পোস্ট নেই।</p>';
+                return;
+            }
+
+            posts.forEach((post, index) => {
+                const item = document.createElement('div');
+                item.className = 'admin-post-item';
+                item.innerHTML = `
+                    <span style="font-size:12px; color:#e2e8f0; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${post.title}</span>
+                    <button class="admin-delete-btn" onclick="deletePost(${index})">মুছুন</button>
+                `;
+                adminList.appendChild(item);
+            });
+        }
+
+        function parseCleanSource(input) {
+            input = input.trim();
+            const srcMatch = input.match(/src=["']([^"']+)["']/i);
+            if (srcMatch) {
+                return srcMatch[1];
+            }
+            return input;
+        }
+
+        function generatePlayerHTML(rawInput) {
+            let src = parseCleanSource(rawInput);
+
+            // ১. গুগল ড্রাইভ
+            if (src.includes('drive.google.com')) {
+                const match = src.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || src.match(/\/d\/([a-zA-Z0-9_-]+)/) || src.match(/id=([a-zA-Z0-9_-]+)/);
+                const driveId = match ? match[1] : src;
+                return `<iframe src="https://drive.google.com/file/d/${driveId}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            }
+
+            // ২. Dailymotion
+            if (src.includes('dailymotion.com')) {
+                return `<iframe src="${src}" allow="autoplay; fullscreen; web-share" allowfullscreen></iframe>`;
+            }
+
+            // ৩. ইউটিউব
+            if (src.includes('youtube.com') || src.includes('youtu.be')) {
+                let ytId = '';
+                if (src.includes('youtu.be/')) ytId = src.split('youtu.be/')[1].split('?')[0];
+                else if (src.includes('/shorts/')) ytId = src.split('/shorts/')[1].split('?')[0];
+                else if (src.includes('v=')) ytId = src.split('v=')[1].split('&')[0];
+                return `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            }
+
+            // ৪. ডিরেক্ট ফাইল (.mp4 ইত্যাদি)
+            if (src.match(/\.(mp4|webm|ogg|mkv)(\?.*)?$/i) || src.includes('archive.org')) {
+                return `
+                    <video controls playsinline preload="metadata">
+                        <source src="${src}" type="video/mp4">
+                        <source src="${src}">
+                    </video>
+                `;
+            }
+
+            return `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+        }
+
+        function displayWatchPage(post) {
+            document.getElementById('videoGrid').style.display = 'none';
+            document.getElementById('watchView').style.display = 'flex';
+            document.getElementById('watchVideoTitle').innerText = post.title;
+
+            const videoList = Array.isArray(post.videos) ? post.videos : [post.videoSrc];
+            const stack = document.getElementById('playersStack');
+            stack.innerHTML = '';
+
+            videoList.forEach((src, idx) => {
+                const card = document.createElement('div');
+                card.className = 'single-player-card';
+                card.innerHTML = `
+                    <div class="player-label">▶️ পর্ব / ভিডিও ${idx + 1}</div>
+                    <div class="player-frame-box">
+                        ${generatePlayerHTML(src)}
+                    </div>
+                `;
+                stack.appendChild(card);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            const videoIndex = params.get('v');
+            const posts = loadPosts();
+
+            if (videoIndex !== null && posts[videoIndex]) {
+                displayWatchPage(posts[videoIndex]);
+            } else {
+                renderPosts();
+            }
+        }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
+                e.preventDefault();
+                const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
+                if (pass === ADMIN_PASSWORD) {
+                    renderAdminList();
+                    document.getElementById('adminModal').style.display = 'flex';
+                } else if (pass !== null) {
+                    alert("ভুল পাসওয়ার্ড!");
+                }
+            }
+        });
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value;
+            const thumb = document.getElementById('postThumb').value;
+            const linksRaw = document.getElementById('postLinks').value.trim();
+
+            if (!title || !linksRaw) {
+                alert("দয়া করে শিরোনাম এবং অন্তত ১টি ভিডিও লিংক দিন!");
+                return;
+            }
+
+            const videoList = linksRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+            const posts = loadPosts();
+            posts.unshift({
+                title: title,
+                thumb: thumb,
+                videos: videoList
+            });
+
+            localStorage.setItem('my_video_posts', JSON.stringify(posts));
+            closeAdminModal();
+            window.location.href = window.location.origin + window.location.pathname;
+        }
+
+        function deletePost(index) {
+            if (confirm("আপনি কি নিশ্চিত এই পোস্টটি মুছে ফেলতে চান?")) {
+                const posts = loadPosts();
+                posts.splice(index, 1);
+                localStorage.setItem('my_video_posts', JSON.stringify(posts));
+                renderAdminList();
+                renderPosts();
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        checkURLParams();
+    </script>
+</body>
+</html>
