@@ -6,10 +6,6 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাড স্ক্রিপ্ট -->
-    <script src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
-    <script src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
-
     <style>
         * {
             box-sizing: border-box;
@@ -397,9 +393,6 @@
     </div>
 
     <script>
-        // =========================================================================
-        // এখানে সরাসরি আপনার সব পোস্ট লিখে রাখবেন (আনলিমিটেড ট্রাফিকের জন্য সেরা)
-        // =========================================================================
         const POSTS_DATA = [
             {
                 title: "Dailymotion Sample Video Episode 1",
@@ -408,17 +401,6 @@
                     "https://geo.dailymotion.com/player.html?video=xazr706"
                 ]
             }
-            // নতুন পোস্ট যোগ করতে কমা (,) দিয়ে নিচের মতো করে অবজেক্ট যোগ করবেন:
-            /*
-            ,{
-                title: "আরেকটি নতুন ভিডিওর টাইটেল",
-                thumb: "https://image-link-here.jpg",
-                videos: [
-                    "https://video-link-1",
-                    "https://video-link-2"
-                ]
-            }
-            */
         ];
 
         function renderPosts() {
@@ -469,19 +451,16 @@
         function generatePlayerHTML(rawInput) {
             let src = parseCleanSource(rawInput);
 
-            // ১. গুগল ড্রাইভ
             if (src.includes('drive.google.com')) {
                 const match = src.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || src.match(/\/d\/([a-zA-Z0-9_-]+)/) || src.match(/id=([a-zA-Z0-9_-]+)/);
                 const driveId = match ? match[1] : src;
                 return `<iframe src="https://drive.google.com/file/d/${driveId}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
             }
 
-            // ২. Dailymotion
             if (src.includes('dailymotion.com')) {
                 return `<iframe src="${src}" allow="autoplay; fullscreen; web-share" allowfullscreen></iframe>`;
             }
 
-            // ৩. ইউটিউব
             if (src.includes('youtube.com') || src.includes('youtu.be')) {
                 let ytId = '';
                 if (src.includes('youtu.be/')) ytId = src.split('youtu.be/')[1].split('?')[0];
@@ -490,7 +469,6 @@
                 return `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             }
 
-            // ৪. ডিরেক্ট ফাইল (.mp4 ইত্যাদি)
             if (src.match(/\.(mp4|webm|ogg|mkv)(\?.*)?$/i) || src.includes('archive.org')) {
                 return `
                     <video controls playsinline preload="metadata">
@@ -503,10 +481,25 @@
             return `<iframe src="${src}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
         }
 
+        function loadInsideWatchAds() {
+            // ১. পপ-আন্ডার স্ক্রিপ্ট (শুধু ওয়াচ পেজের ভেতরে লোড হবে)
+            const popScript = document.createElement('script');
+            popScript.src = "https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js";
+            document.body.appendChild(popScript);
+
+            // ২. সোশ্যাল বার স্ক্রিপ্ট (শুধু ওয়াচ পেজের ভেতরে লোড হবে)
+            const barScript = document.createElement('script');
+            barScript.src = "https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js";
+            document.body.appendChild(barScript);
+        }
+
         function displayWatchPage(post) {
             document.getElementById('videoGrid').style.display = 'none';
             document.getElementById('watchView').style.display = 'flex';
             document.getElementById('watchVideoTitle').innerText = post.title;
+
+            // শুধু ওয়াচ পেজে আসলেই অ্যাড স্ক্রিপ্ট চালু হবে
+            loadInsideWatchAds();
 
             const videoList = Array.isArray(post.videos) ? post.videos : [post.videoSrc];
             const stack = document.getElementById('playersStack');
