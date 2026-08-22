@@ -6,8 +6,8 @@
     <title>Video Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- অ্যাডস্টেরা সোশ্যাল বার অ্যাড (হেডারেই লোড) -->
-    <script type="text/javascript" src="//classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
+    <!-- অ্যাডস্টেরা সোশ্যাল বার -->
+    <script type="text/javascript" src="https://classesreddenhall.com/92/f5/f1/92f5f195aff959e47200d1932c0194c0.js"></script>
 
     <style>
         * {
@@ -301,7 +301,6 @@
             padding-top: 8px;
         }
 
-        /* অ্যাডমিন মোডাল */
         .modal {
             display: none;
             position: fixed;
@@ -416,7 +415,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
 
@@ -436,7 +435,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
         </div>
@@ -469,7 +468,7 @@
                             'params' : {}
                         };
                     </script>
-                    <script type="text/javascript" src="//classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
+                    <script type="text/javascript" src="https://classesreddenhall.com/9106b28060c8cb5f051946b0d46a7e91/invoke.js"></script>
                 </div>
             </div>
 
@@ -501,11 +500,14 @@
         </div>
     </div>
 
-    <!-- গ্লোবাল পপ-আন্ডার স্ক্রিপ্ট লোডার -->
-    <script type="text/javascript" src="//classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
+    <!-- গ্লোবাল স্ক্রিপ্ট ট্যাগ ব্যাকআপ -->
+    <script type="text/javascript" src="https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js"></script>
 
     <script>
         const ADMIN_PASSWORD = "1234";
+
+        // Adsterra Direct Link (Smartlink) - প্রতি থাম্বনেইল ক্লিকে কাজ করার জন্য
+        const ADSTERRA_DIRECT_LINK = "https://classesreddenhall.com/4f/25/33/4f2533f7e5b334080bd77c9beae576a8.js";
 
         const DEFAULT_POSTS = [
             {
@@ -540,6 +542,13 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.onclick = () => {
+                    // ১. পপ-আন্ডার ট্রিগার
+                    try {
+                        const win = window.open(ADSTERRA_DIRECT_LINK, '_blank');
+                        if (win) win.focus();
+                    } catch(e) {}
+
+                    // ২. ওয়াচ পেজে প্রবেশ
                     const url = new URL(window.location.href);
                     url.searchParams.set('v', index);
                     window.location.href = url.toString();
@@ -661,9 +670,9 @@
             }
         }
 
-        // অ্যাডমিন প্যানেল লিসেনার (Ctrl + Alt + S)
-        window.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS' || e.keyCode === 83)) {
+        // অ্যাডমিন মোডাল ওপেন শর্টকাট (Ctrl + Alt + S)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
                 e.preventDefault();
                 const pass = prompt("অ্যাডমিন পাসওয়ার্ড দিন:");
                 if (pass === ADMIN_PASSWORD) {
